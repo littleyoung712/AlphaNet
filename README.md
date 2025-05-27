@@ -18,7 +18,8 @@ Feature to image:
 
 Inspired by the structure of convolutional neural networks (CNNs), AlphaNet organizes Eod data into a "data image" format for input into the network. The format for our feature image is shown in figure 1. Each day, for every stock, we set a rolling window (30 in our report) and collect all the Eod data during this window, finally we can get a feature image of size 8*30 for an individual stock. We first expand this feature image to cross-section and move our rolling window by 5 days, then we repeat this procedure throughout the time horizon. Finally, our X would be the shape of , for example, if we have 5000 stocks and 1000 trading days, then we can collect X with shape 1000000*8*30. For labels, we use stock return in the next five days, which is consistent with our moving step.
 
-![Figure 1](images/figure1.png) Feature Image
+![image](https://github.com/user-attachments/assets/fc07230d-e7e2-48de-9289-7420ede76786)
+ Feature Image
 
 Model Structure
 
@@ -28,7 +29,8 @@ Genetic Algorithm is a very classical algorithm for alpha mining. The main idea 
 
 and in the next generation, the symbolic trees with the highest fitness will be reserved as parent, then by inheritance and mutation, they would produce the next generation.  One drawback of Genetic Algorithm is that it exhibits a high degree of randomness, as each generation involves probabilistic processes of inheritance and mutation. So, the final performance of our best population would somehow depend on this probabilistic process. Besides, libraries for Genetic Algorithm, such as gplearn, is not based on cuda so that we can not utilize our GPU for acceleration. Considering these, we propose a new model, which corporates Genetic Algorithm into deep neural network.
 
-![Figure 2](images/figure2.png) Symbolic Tree for Genetic Algorithm
+![image](https://github.com/user-attachments/assets/bcd5de7a-d6d7-4ef3-b0c7-9092b119c4ca)
+Symbolic Tree for Genetic Algorithm
 
 AlphaNet Structure:
 
@@ -56,7 +58,8 @@ After the feature extraction layer is the pooling layer. Pooling method derives 
 
 Afterwards, we connect the flattened features after extraction layer, which is  and features after the pooling together, which is also 288 in length. This is called residual connection method, which is meant to learn information both from features and the difference between each layer’s output. The residual connection output would then be fed into a fully connection layer with output length of 30. After activation function and dropout, we add another fully connection layer and finally get our prediction. The whole structure of AlphaNet is shown in Figure 3.
 
-![Figure 3](images/figure3.png) AlphaNet Structure
+![image](https://github.com/user-attachments/assets/0d26127e-7c28-4b9a-b0ba-9892910bc7dd)
+ AlphaNet Structure
 
 Training and Predicting
 
@@ -74,7 +77,8 @@ Model training:
 
 We have 50 epochs in total, which means our model would update its’ parameters from all the input through 50 times. To avoid overfitting and time wasting, we set an early stopping of 10 epochs. If the loss in validation set does not decrease for more than 10 epochs, our model will stop training. Learning rate is set 0.001. Training and Validation Loss is shown in Figure 4.
 
-![Figure 4](images/figure4.png) Training and Validation Loss
+![image](https://github.com/user-attachments/assets/e02e6e4f-36c0-427f-8afc-145d2b815720)
+ Training and Validation Loss
 
 The figure clearly displays training and validation loss movement with epochs. Throughout the training process, the training loss keeps decreasing while validation loss reaches the minimal at epoch 7 with value -0.1258, so model parameter stops updating at epoch 17 where early stopping is triggered.
 
@@ -106,7 +110,8 @@ In the feature extraction layer, we do not generate the combination randomly, in
 
 The other 285 expressions can be deduced in the same way. Upon knowing the alpha expression and there corresponding gradient, we can find the expressions with the smallest gradient, which is of great importance to our model. Top 10 important alphas are shown here:
 
-![Figure 5](images/figure5.png) Feature Importance
+![image](https://github.com/user-attachments/assets/f575f28b-7c29-4dc6-bd34-ef764f8b6328)
+ Feature Importance
 
 Factor Backtesting
 
@@ -116,19 +121,22 @@ Since our model use the returns in the next 5 days as labels, so the rebalanced 
 
 Alpha hierarchical performance:
 
-![Figure 6](images/figure6.png) Hierarchical Performance
+![image](https://github.com/user-attachments/assets/e9999569-38c8-46c2-872c-2e9ba0abb24e)
+ Hierarchical Performance
 
 Hopefully, AlphaNet factor performs well both in training and testing dataset. This factor exhibits clear stratification with 5 the best and 1 the worst. What’s more, LS return is not generated from the bad performed layer 1. Layer 5 has very desiring long return, nearly 150% in 5 years and 50% in training period.
 
 IC performance:
 
-![Figure 7](images/figure7.png) IC Performance
+![image](https://github.com/user-attachments/assets/38c67db5-be8d-42c7-83fe-b2b607ed5dfc)
+ IC Performance
 
 Since we use the IC function in our project 1 where daily frequency alpha is required, we have to fill our prediction with the nearest former one to get daily frequency, which contribute some error in calculating the IC. However, the IC is still satisfying, especially for alpha generated by machine learning methods. This IC indicate that our model in testing set is as same robust as our training set.
 
 Hit rate:
 
-![Figure 7](images/figure7.png) Hit Rate
+![image](https://github.com/user-attachments/assets/391b40ec-02db-4ca2-af7d-5f4a46dc7cb5)
+ Hit Rate
 
 Since stock pool is All A share, we use ‘choice_a’as our benchmark. Clearly, layer 5’hit rate remains higher than layer 1 throughout the whole period.
 
@@ -139,17 +147,3 @@ AlphaNet presents a novel and interpretable deep learning framework for alpha fa
 Reference
 
 AlphaNet: A Neural Network for Factor Mining, Huatai Security
-
-![Figure 1](figure1.png)
-
-![Figure 2](figure2.png)
-
-![Figure 3](figure3.png)
-
-![Figure 4](figure4.png)
-
-![Figure 5](figure5.png)
-
-![Figure 6](figure6.png)
-
-![Figure 7](figure7.png)
